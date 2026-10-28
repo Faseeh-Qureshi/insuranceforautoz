@@ -1,0 +1,6 @@
+{
+  "name": "InsuranceforAutoz",
+  "description": "Compare auto insurance rates, coverage options, and eligible discounts in one phone call through participating U.S. insurance agencies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

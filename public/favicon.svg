@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="15" fill="#07162B"/>
+  <!-- Open-arch minimalist coupe silhouette matching BrandMark -->
+  <path
+    d="M11.5 40.5H6.8C7.2 34.2 13.1 31.1 22.6 30.5C27.6 26.1 33.7 23.5 40.8 23.5C48.1 23.5 54.4 26.1 59.8 29.7"
+    stroke="#FFFFFF"
+    stroke-width="3.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M29.4 31.3C39.6 31.3 50.2 30.7 59.8 29.7"
+    stroke="#39BEF2"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+  <path
+    d="M15.4 40.5A4.9 4.9 0 0 1 25.2 40.5"
+    stroke="#39BEF2"
+    stroke-width="3.1"
+    stroke-linecap="round"
+  />
+  <path
+    d="M28.2 40.5H43.1"
+    stroke="#258BFA"
+    stroke-width="2.6"
+    stroke-linecap="round"
+  />
+  <path
+    d="M46.1 40.5A4.9 4.9 0 0 1 55.9 40.5H59.5"
+    stroke="#39BEF2"
+    stroke-width="3.1"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
