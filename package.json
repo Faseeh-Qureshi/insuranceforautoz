@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
     "check": "tsc --noEmit && NODE_ENV=production vite build",
-    "clean": "rm -rf dist server.js"
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

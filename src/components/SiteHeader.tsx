@@ -47,10 +47,7 @@ export function SiteHeader({
 
   return (
     <>
-      <header
-        id="top"
-        className="sticky top-0 z-50 w-full border-b border-[#CFC2AC] pt-[env(safe-area-inset-top,0px)]"
-      >
+      <header className="sticky top-0 z-50 w-full border-b border-[#CFC2AC] pt-[env(safe-area-inset-top,0px)]">
         {/* Separate background layer so backdrop-filter never creates a clipping containing block for fixed drawers */}
         <div
           aria-hidden="true"

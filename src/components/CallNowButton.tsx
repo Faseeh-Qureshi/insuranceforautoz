@@ -17,7 +17,8 @@ interface CallNowButtonProps {
 
 declare global {
   interface Window {
-    dataLayer?: Array<Record<string, unknown>>;
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -47,10 +48,8 @@ export function CallNowButton({
       : 17;
 
   const handleTrackClick = () => {
-    // Dispatches placement metadata to GTM/Cloudflare Zaraz if configured, distinguishing click intent from completed calls
-    if (typeof window !== "undefined" && Array.isArray(window.dataLayer)) {
-      window.dataLayer.push({
-        event: "call_cta_click",
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "call_cta_click", {
         cta_placement: variant,
         phone_destination: SITE_CONFIG.phone.e164,
       });

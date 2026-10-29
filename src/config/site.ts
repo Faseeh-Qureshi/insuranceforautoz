@@ -1,6 +1,6 @@
 /**
  * Central site configuration for InsuranceforAutoz.com.
- * Reads build-time VITE_* variables from .env / .env.production or Cloudflare Pages.
+ * Pure static build-time configuration for Cloudflare Pages global edge delivery.
  */
 
 function cleanEnvValue(value: string | undefined, fallback: string): string {
@@ -9,6 +9,17 @@ function cleanEnvValue(value: string | undefined, fallback: string): string {
     return fallback;
   }
   return trimmed;
+}
+
+function normalizeSiteOrigin(raw: string): string {
+  const cleaned = raw.trim().replace(/\/+$/, "");
+  if (!cleaned) {
+    return "https://insuranceforautoz.com";
+  }
+  if (/^https?:\/\//i.test(cleaned)) {
+    return cleaned.replace(/^http:\/\//i, "https://");
+  }
+  return `https://${cleaned}`;
 }
 
 function normalizeUsE164(raw: string): string {
@@ -49,10 +60,9 @@ function cleanOptionalPolicyUrl(value: string | undefined): string {
   return trimmed;
 }
 
-const rawSiteUrl = cleanEnvValue(
-  import.meta.env.VITE_SITE_URL,
-  "https://insuranceforautoz.com"
-).replace(/\/+$/, "");
+const rawSiteUrl = normalizeSiteOrigin(
+  cleanEnvValue(import.meta.env.VITE_SITE_URL, "https://insuranceforautoz.com")
+);
 
 export const CALL_PHONE_E164 = normalizeUsE164(
   cleanEnvValue(import.meta.env.VITE_CALL_PHONE_E164, "+18484671057")

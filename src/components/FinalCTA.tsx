@@ -17,7 +17,6 @@ export function FinalCTA() {
             height={568}
             loading="lazy"
             decoding="async"
-            referrerPolicy="no-referrer"
             className="absolute inset-0 w-full h-full object-cover object-[right_center]"
           />
           <div

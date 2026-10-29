@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowUp, MapPin, Phone, X } from "lucide-react";
+import { MapPin, Phone, X } from "lucide-react";
 import { SITE_CONFIG } from "../config/site";
 import { BrandMark } from "./BrandMark";
 import { CallNowButton } from "./CallNowButton";
@@ -246,16 +246,6 @@ export function SiteFooter({ onModalOpenChange }: SiteFooterProps) {
                 Terms
               </button>
             )}
-            <span aria-hidden="true" className="text-white/25">
-              &middot;
-            </span>
-            <a
-              href="#top"
-              className="inline-flex items-center gap-1 text-white/75 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60A5FA] rounded-xs"
-            >
-              <span>Back to top</span>
-              <ArrowUp size={12} strokeWidth={2.3} aria-hidden="true" />
-            </a>
           </div>
         </div>
       </div>

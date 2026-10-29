@@ -63,7 +63,6 @@ export function BenefitsSection() {
                   height={768}
                   loading="lazy"
                   decoding="async"
-                  referrerPolicy="no-referrer"
                   className="w-full h-full object-cover object-[76%_35%]"
                 />
               </div>

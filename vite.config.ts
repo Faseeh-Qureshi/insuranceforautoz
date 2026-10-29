@@ -4,6 +4,17 @@ import fs from 'fs';
 import path from 'path';
 import {defineConfig, loadEnv, type Plugin} from 'vite';
 
+function normalizeSiteOrigin(raw: string | undefined): string {
+  const cleaned = (raw || '').trim().replace(/\/+$/, '');
+  if (!cleaned || cleaned.startsWith('MY_')) {
+    return 'https://insuranceforautoz.com';
+  }
+  if (/^https?:\/\//i.test(cleaned)) {
+    return cleaned.replace(/^http:\/\//i, 'https://');
+  }
+  return `https://${cleaned}`;
+}
+
 function formatPhoneMetadata(rawE164: string): {
   fullDisplay: string;
   schemaTel: string;
@@ -31,9 +42,7 @@ function formatPhoneMetadata(rawE164: string): {
 }
 
 function productionSitePlugin(env: Record<string, string>): Plugin {
-  const siteOrigin = (env.VITE_SITE_URL || 'https://insuranceforautoz.com')
-    .trim()
-    .replace(/\/+$/, '');
+  const siteOrigin = normalizeSiteOrigin(env.VITE_SITE_URL);
   const phoneE164 = (env.VITE_CALL_PHONE_E164 || '+18484671057').trim();
   const streetAddress = (
     env.VITE_COMPANY_ADDRESS_LINE1 || '7901 4th St N STE 300'
@@ -61,7 +70,7 @@ function productionSitePlugin(env: Record<string, string>): Plugin {
         fs.rmSync(internalAttachmentsDir, {recursive: true, force: true});
       }
 
-      // Sync robots.txt and sitemap.xml with active VITE_SITE_URL
+      // Sync robots.txt and sitemap.xml with active https:// site origin
       for (const filename of ['robots.txt', 'sitemap.xml']) {
         const filePath = path.join(distDir, filename);
         if (fs.existsSync(filePath)) {
@@ -79,6 +88,7 @@ export default defineConfig(({command, mode}) => {
   const env = loadEnv(mode, import.meta.dirname, '');
 
   return {
+    base: '/',
     plugins: [react(), tailwindcss(), productionSitePlugin(env)],
     define:
       command === 'build'
@@ -86,6 +96,12 @@ export default defineConfig(({command, mode}) => {
             'process.env.NODE_ENV': JSON.stringify('production'),
           }
         : undefined,
+    build: {
+      target: 'es2020',
+      assetsDir: 'assets',
+      sourcemap: false,
+      cssCodeSplit: true,
+    },
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, '.'),

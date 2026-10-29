@@ -34,7 +34,6 @@ export function CoverageCard() {
           height={896}
           loading="lazy"
           decoding="async"
-          referrerPolicy="no-referrer"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div

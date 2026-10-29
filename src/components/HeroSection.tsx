@@ -20,7 +20,6 @@ export function HeroSection() {
           loading="eager"
           fetchPriority="high"
           decoding="sync"
-          referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-[76%_52%]"
         />
         <div
@@ -88,7 +87,6 @@ export function HeroSection() {
           height={768}
           loading="eager"
           decoding="async"
-          referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-[76%_54%]"
         />
         <div
