@@ -1,8 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
   <url>
     <loc>https://insuranceforautoz.com/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-11-02</lastmod>
+    <image:image>
+      <image:loc>https://insuranceforautoz.com/images/hero-suv-road.webp</image:loc>
+      <image:title>Compare U.S. Auto Insurance Rates by Phone</image:title>
+      <image:caption>Compare auto insurance rates and coverage options in one phone call through participating state-licensed U.S. agencies.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://insuranceforautoz.com/images/driver-savings.webp</image:loc>
+      <image:title>Auto Insurance Renewal Rate Comparison and Discounts</image:title>
+      <image:caption>Review multi-car, safe-driver, and policy bundling auto insurance discounts before your policy renews.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://insuranceforautoz.com/images/mountain-road-coverage.webp</image:loc>
+      <image:title>Liability, Collision, Comprehensive, and SR-22 Coverage</image:title>
+      <image:caption>Auto insurance coverage options matched to daily commuters, financed vehicles, and state SR-22 filings.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://insuranceforautoz.com/images/scenic-road-cta.webp</image:loc>
+      <image:title>Free Phone Rate Check Before Policy Renewal</image:title>
+      <image:caption>Speak with a state-licensed insurance agency to benchmark your current auto insurance policy with no obligation.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://insuranceforautoz.com/auto-insurance-coverage/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <image:image>
+      <image:loc>https://insuranceforautoz.com/images/mountain-road-coverage.webp</image:loc>
+      <image:title>Auto Insurance Coverage Types and Liability Limits Guide</image:title>
+      <image:caption>Side-by-side breakdown of liability, collision, comprehensive, uninsured motorist, and medical auto insurance coverages.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://insuranceforautoz.com/car-insurance-discounts/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <image:image>
+      <image:loc>https://insuranceforautoz.com/images/driver-savings.webp</image:loc>
+      <image:title>Car Insurance Discounts and Renewal Savings Checklist</image:title>
+      <image:caption>Common U.S. auto insurance discount categories including safe driving, multi-vehicle, bundling, and paid-in-full credits.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://insuranceforautoz.com/sr22-high-risk-auto-insurance/</loc>
+    <lastmod>2026-11-02</lastmod>
+  </url>
+  <url>
+    <loc>https://insuranceforautoz.com/how-it-works/</loc>
+    <lastmod>2026-11-02</lastmod>
+  </url>
+  <url>
+    <loc>https://insuranceforautoz.com/privacy-policy/</loc>
+    <lastmod>2026-11-02</lastmod>
+  </url>
+  <url>
+    <loc>https://insuranceforautoz.com/terms-of-use/</loc>
+    <lastmod>2026-11-02</lastmod>
   </url>
 </urlset>

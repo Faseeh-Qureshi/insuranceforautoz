@@ -18,16 +18,10 @@ export function BrandMark({
   const baseGradId = `car-base-${uid}`;
   const isDark = theme === "dark";
 
-  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    onClick?.();
-  };
-
   return (
     <a
       href="/"
-      onClick={handleClick}
+      onClick={onClick}
       aria-label={SITE_CONFIG.brandName}
       className="group inline-flex items-center gap-1.5 min-[380px]:gap-2.5 sm:gap-3 min-w-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0A56C2] rounded-xs"
     >

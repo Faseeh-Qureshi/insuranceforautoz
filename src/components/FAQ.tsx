@@ -1,38 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
-
-const FAQ_ITEMS = [
-  {
-    id: "faq-1",
-    question: "Is there any fee to call and check rates?",
-    answer:
-      "No. InsuranceforAutoz is free for drivers. Participating agencies quote policies at no charge, and you pay a premium only if you choose to buy coverage from a provider.",
-  },
-  {
-    id: "faq-2",
-    question: "Why call instead of filling out online quote forms?",
-    answer:
-      "Online forms often collect pages of personal data before showing rough estimates. A short call lets a licensed agent match exact coverage limits, deductibles, and eligible discounts right away.",
-  },
-  {
-    id: "faq-3",
-    question: "Will every carrier shown offer me a quote?",
-    answer:
-      "Not always. Carrier availability depends on your state, vehicle, driving record, and the insurers represented by participating agencies in your area.",
-  },
-  {
-    id: "faq-4",
-    question: "Do I have to wait until my policy expires to switch?",
-    answer:
-      "No. Reviewing quotes carries zero obligation, and if you choose a better policy mid-term, a licensed agent can align your new start date with your cancellation date so coverage never lapses.",
-  },
-  {
-    id: "faq-5",
-    question: "What details help speed up the call?",
-    answer:
-      "Having your five-digit ZIP code, vehicle year, make, and model, and your current or preferred coverage level is enough to begin.",
-  },
-] as const;
+import { HOME_FAQ_ITEMS as FAQ_ITEMS } from "../seo/routes";
 
 export function FAQ() {
   const [openIds, setOpenIds] = useState<Record<string, boolean>>({

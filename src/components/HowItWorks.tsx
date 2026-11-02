@@ -41,7 +41,14 @@ export function HowItWorks() {
             Check Your Rate in Three Steps.
           </h2>
           <p className="mt-2 text-[14.5px] sm:text-[15.5px] text-white/80 leading-[1.56]">
-            Skip multi-page online forms and review real policy pricing by phone.
+            Skip multi-page online forms and review real policy pricing by phone.{" "}
+            <a
+              href="/how-it-works/"
+              className="font-bold text-[#93C5FD] hover:text-white underline underline-offset-4 transition-colors"
+            >
+              See how agency matching works
+            </a>
+            .
           </p>
         </div>
 

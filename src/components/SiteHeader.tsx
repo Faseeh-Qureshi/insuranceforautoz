@@ -5,11 +5,13 @@ import { BrandMark } from "./BrandMark";
 import { CallNowButton } from "./CallNowButton";
 
 interface SiteHeaderProps {
+  currentPath?: string;
   mobileMenuOpen: boolean;
   onToggleMobileMenu: (open: boolean) => void;
 }
 
 export function SiteHeader({
+  currentPath = "/",
   mobileMenuOpen,
   onToggleMobileMenu,
 }: SiteHeaderProps) {
@@ -63,17 +65,25 @@ export function SiteHeader({
 
           <nav
             aria-label="Primary navigation"
-            className="hidden lg:flex items-center gap-7 text-[14px] font-semibold text-[#34465D]"
+            className="hidden lg:flex items-center gap-6 text-[14px] font-semibold text-[#34465D]"
           >
-            {SITE_CONFIG.navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="hover:text-[#0A1B33] underline-offset-8 hover:underline decoration-[#0A56C2] decoration-2 transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0A56C2] rounded-xs"
-              >
-                {item.label}
-              </a>
-            ))}
+            {SITE_CONFIG.navItems.map((item) => {
+              const isActive = item.href === currentPath;
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`underline-offset-8 decoration-[#0A56C2] decoration-2 transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0A56C2] rounded-xs ${
+                    isActive
+                      ? "text-[#0A1B33] underline"
+                      : "hover:text-[#0A1B33] hover:underline"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-1.5 min-[380px]:gap-2 shrink-0">

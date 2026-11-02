@@ -16,10 +16,13 @@ function normalizeSiteOrigin(raw: string): string {
   if (!cleaned) {
     return "https://insuranceforautoz.com";
   }
-  if (/^https?:\/\//i.test(cleaned)) {
-    return cleaned.replace(/^http:\/\//i, "https://");
-  }
-  return `https://${cleaned}`;
+  const withScheme = /^https?:\/\//i.test(cleaned)
+    ? cleaned.replace(/^http:\/\//i, "https://")
+    : `https://${cleaned}`;
+  return withScheme.replace(
+    /^https:\/\/www\.insuranceforautoz\.com$/i,
+    "https://insuranceforautoz.com"
+  );
 }
 
 function normalizeUsE164(raw: string): string {
@@ -102,18 +105,19 @@ export const SITE_CONFIG = {
     full: `${addressLine1}, ${addressLine2}`,
   },
   navItems: [
-    { label: "Why Compare", href: "#why-compare" },
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "Coverage", href: "#coverage" },
-    { label: "FAQs", href: "#faq" },
+    { label: "Coverage", href: "/auto-insurance-coverage/" },
+    { label: "Discounts", href: "/car-insurance-discounts/" },
+    { label: "SR-22", href: "/sr22-high-risk-auto-insurance/" },
+    { label: "How It Works", href: "/how-it-works/" },
+    { label: "FAQs", href: "/#faq" },
   ],
   legalLinks: {
-    privacyPolicyUrl: cleanOptionalPolicyUrl(
-      import.meta.env.VITE_PRIVACY_POLICY_URL
-    ),
-    termsOfUseUrl: cleanOptionalPolicyUrl(
-      import.meta.env.VITE_TERMS_OF_USE_URL
-    ),
+    privacyPolicyUrl:
+      cleanOptionalPolicyUrl(import.meta.env.VITE_PRIVACY_POLICY_URL) ||
+      "/privacy-policy/",
+    termsOfUseUrl:
+      cleanOptionalPolicyUrl(import.meta.env.VITE_TERMS_OF_USE_URL) ||
+      "/terms-of-use/",
   },
   footerDisclosure:
     "InsuranceforAutoz is an independent marketing and referral service, not an insurance company, agency, or broker. We do not underwrite policies, bind coverage, or issue quotes directly. Calling connects you with participating third-party insurance agencies licensed in your state. Rates, discounts, coverage terms, and carrier availability vary by state, vehicle, driving record, and insurer underwriting rules.",

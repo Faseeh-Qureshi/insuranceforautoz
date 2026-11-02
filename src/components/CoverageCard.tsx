@@ -78,6 +78,21 @@ export function CoverageCard() {
           </li>
         ))}
       </ul>
+
+      <div className="relative z-10 border-t border-white/10 bg-[#071526] px-5 py-3.5 flex flex-wrap items-center justify-between gap-2 text-[12.5px]">
+        <a
+          href="/auto-insurance-coverage/"
+          className="font-bold text-[#93C5FD] hover:text-white transition-colors"
+        >
+          Compare coverage limits &rarr;
+        </a>
+        <a
+          href="/sr22-high-risk-auto-insurance/"
+          className="font-bold text-[#93C5FD] hover:text-white transition-colors"
+        >
+          SR-22 &amp; high-risk guide &rarr;
+        </a>
+      </div>
     </div>
   );
 }

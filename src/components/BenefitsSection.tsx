@@ -91,10 +91,18 @@ export function BenefitsSection() {
               </div>
             </div>
 
-            <p className="mt-3 text-[12px] text-[#4E6078] leading-[1.5]">
-              Discounts and policy rates depend on state filings, insurer
-              underwriting rules, and verified driving history.
-            </p>
+            <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 text-[12px] leading-[1.5]">
+              <p className="text-[#4E6078]">
+                Discounts and policy rates depend on state filings, insurer
+                underwriting rules, and verified driving history.
+              </p>
+              <a
+                href="/car-insurance-discounts/"
+                className="font-bold text-[#0A56C2] hover:underline shrink-0"
+              >
+                Explore car insurance discounts &rarr;
+              </a>
+            </div>
           </div>
         </div>
       </div>

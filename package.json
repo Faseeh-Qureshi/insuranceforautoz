@@ -8,12 +8,13 @@
   },
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "NODE_ENV=production vite build",
+    "build": "vite build && vite build --ssr src/entry-server.tsx --outDir .ssr-temp && node scripts/prerender.mjs",
     "preview": "vite preview --port=4173 --host=0.0.0.0",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
-    "check": "tsc --noEmit && NODE_ENV=production vite build",
-    "clean": "rm -rf dist"
+    "test": "tsc --noEmit",
+    "check": "tsc --noEmit && npm run build",
+    "clean": "rm -rf dist .ssr-temp"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

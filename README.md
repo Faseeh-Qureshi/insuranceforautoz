@@ -102,8 +102,12 @@ All site-wide configuration is read at build time from Vite environment variable
 
 ---
 
-## 5. Post-Publish Client Checklist
+## 5. Search Engine Indexing & Post-Publish Checklist
 
-- **Standalone Legal URLs:** Once dedicated Privacy Policy and Terms of Use pages or hosted URLs are finalized, set `VITE_PRIVACY_POLICY_URL` and `VITE_TERMS_OF_USE_URL` in Cloudflare Pages and trigger a redeploy.
+- **Pre-Rendered Static Pages (`dist/`):** Every `npm run build` pre-renders full semantic HTML, Schema.org JSON-LD (`Organization`, `Service`, `WebSite`, `WebPage`, `BreadcrumbList`, and `FAQPage`), and canonical metadata for all 7 indexable routes (`/`, `/auto-insurance-coverage/`, `/car-insurance-discounts/`, `/sr22-high-risk-auto-insurance/`, `/how-it-works/`, `/privacy-policy/`, `/terms-of-use/`) plus `404.html`, `robots.txt`, and `sitemap.xml` (including Google Image Sitemap entries).
+- **Submit Sitemap in Google Search Console & Bing Webmaster Tools:**
+  1. Verify domain ownership for `insuranceforautoz.com` in **Google Search Console** (via Cloudflare DNS auto-verification).
+  2. Open **Sitemaps** in Search Console and submit `https://insuranceforautoz.com/sitemap.xml`.
+  3. Use **URL Inspection -> Request Indexing** on `https://insuranceforautoz.com/` to accelerate initial Googlebot crawling.
 - **Business Email:** Intentionally omitted until an official mailbox is active.
 - **Call-Center Operating Hours:** Omitted to avoid displaying unverified hours; add verified hours in `src/config/site.ts` once confirmed.
