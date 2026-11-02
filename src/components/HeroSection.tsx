@@ -5,7 +5,7 @@ import { CallNowButton } from "./CallNowButton";
 const TRUST_POINTS = ["Free service", "No web forms", "No obligation"] as const;
 
 const HERO_SRCSET =
-  "/images/hero-suv-road-480.webp 480w, /images/hero-suv-road-640.webp 640w, /images/hero-suv-road-960.webp 960w, /images/hero-suv-road.webp 1376w";
+  "/images/hero-suv-road-480.webp 480w, /images/hero-suv-road-640.webp 640w, /images/hero-suv-road-800.webp 800w, /images/hero-suv-road-1080.webp 1080w, /images/hero-suv-road.webp 1376w";
 
 export function HeroSection() {
   return (
@@ -70,7 +70,7 @@ export function HeroSection() {
           height={768}
           loading="eager"
           fetchPriority="high"
-          decoding="async"
+          decoding="sync"
           className="w-full h-full object-cover object-[76%_54%] md:object-[76%_52%]"
         />
         {/* Desktop lateral & bottom contrast gradients */}

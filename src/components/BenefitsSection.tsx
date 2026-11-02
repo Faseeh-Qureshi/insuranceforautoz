@@ -38,7 +38,7 @@ export function BenefitsSection() {
     <section
       id="why-compare"
       aria-labelledby="why-compare-heading"
-      className="w-full bg-[#F2EBDF] py-10 sm:py-14 lg:py-18"
+      className="cv-auto w-full bg-[#F2EBDF] py-10 sm:py-14 lg:py-18"
     >
       <div className="max-w-[1240px] mx-auto pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-11 items-start">

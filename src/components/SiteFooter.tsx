@@ -15,7 +15,7 @@ export function SiteFooter() {
   const currentYear = 2026;
 
   return (
-    <footer className="w-full bg-[#05101F] text-white border-t border-white/10">
+    <footer className="cv-auto w-full bg-[#05101F] text-white border-t border-white/10">
       {/* Tier 1: Corporate Identity, Direct Quote Line & Crawlable Site Directory */}
       <div className="max-w-[1240px] mx-auto pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 lg:px-8 py-10 sm:py-13">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-start">

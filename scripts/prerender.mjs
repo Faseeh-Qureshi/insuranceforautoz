@@ -167,12 +167,12 @@ async function run() {
       }
     }
 
-    // 8. Inject route-specific Schema.org JSON-LD (minified to save initial HTML bytes)
-    const compactJsonLd = JSON.stringify(jsonLd);
+    // 8. Move route-specific Schema.org JSON-LD out of <head> and inject at the end of <body> so above-the-fold HTML arrives in the earliest Slow 4G packets
     html = html.replace(
-      /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-      `<script type="application/ld+json">${compactJsonLd}</script>`
+      /\s*(?:<!-- Schema\.org Structured Data -->\s*)?<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+      ""
     );
+    const compactJsonLd = JSON.stringify(jsonLd);
 
     // 9. Inject pre-rendered semantic React HTML into <div id="root">
     html = html.replace(
@@ -180,7 +180,8 @@ async function run() {
       () => `<div id="root">${cleanedAppHtml}</div>`
     );
 
-    // 10. Attach non-blocking progressive hydration + first-tap replay for pre-rendered HTML
+    // 10. Append JSON-LD + non-blocking progressive hydration at end of <body>
+    const jsonLdScript = `<script type="application/ld+json">${compactJsonLd}</script>`;
     if (clientEntrySrc) {
       const hydrationBootstrap = `<script>
 (function(){
@@ -218,7 +219,12 @@ async function run() {
   }, true);
 })();
 </script>`;
-      html = html.replace("</body>", `    ${hydrationBootstrap}\n  </body>`);
+      html = html.replace(
+        "</body>",
+        `    ${jsonLdScript}\n    ${hydrationBootstrap}\n  </body>`
+      );
+    } else {
+      html = html.replace("</body>", `    ${jsonLdScript}\n  </body>`);
     }
 
     // 10. Write static output file

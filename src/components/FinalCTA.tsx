@@ -5,7 +5,7 @@ export function FinalCTA() {
   return (
     <section
       aria-labelledby="final-cta-heading"
-      className="w-full bg-[#F2EBDF] py-10 sm:py-14 border-t border-[#CBBBA2]"
+      className="cv-auto w-full bg-[#F2EBDF] py-10 sm:py-14 border-t border-[#CBBBA2]"
     >
       <div className="max-w-[1240px] mx-auto pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 lg:px-8">
         <div className="relative rounded-xl overflow-hidden bg-[#071629] border border-[#122744] px-5 py-7 sm:px-10 sm:py-9 lg:px-12 lg:py-10 shadow-[0_14px_34px_rgba(7,22,41,0.14)]">

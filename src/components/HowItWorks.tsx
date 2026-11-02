@@ -27,7 +27,7 @@ export function HowItWorks() {
     <section
       id="how-it-works"
       aria-labelledby="how-it-works-heading"
-      className="w-full bg-[#08182D] text-white border-y border-white/10 py-10 sm:py-14 lg:py-18"
+      className="cv-auto w-full bg-[#08182D] text-white border-y border-white/10 py-10 sm:py-14 lg:py-18"
     >
       <div className="max-w-[1240px] mx-auto pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 lg:px-8">
         <div className="max-w-[540px]">
