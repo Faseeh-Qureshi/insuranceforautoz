@@ -5,7 +5,7 @@ import { CallNowButton } from "./CallNowButton";
 const TRUST_POINTS = ["Free service", "No web forms", "No obligation"] as const;
 
 const HERO_SRCSET =
-  "/images/hero-suv-road-640.webp 640w, /images/hero-suv-road-960.webp 960w, /images/hero-suv-road.webp 1376w";
+  "/images/hero-suv-road-480.webp 480w, /images/hero-suv-road-640.webp 640w, /images/hero-suv-road-960.webp 960w, /images/hero-suv-road.webp 1376w";
 
 export function HeroSection() {
   return (

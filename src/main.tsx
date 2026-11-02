@@ -4,6 +4,12 @@ import App, { loadGuideSwitch } from "./App.tsx";
 import { normalizeRoutePath } from "./seo/clientRoutes";
 import "./index.css";
 
+declare global {
+  interface Window {
+    __markHydrated?: () => void;
+  }
+}
+
 const rootEl = document.getElementById("root")!;
 const initialPath = window.location.pathname;
 const normalized = normalizeRoutePath(initialPath);
@@ -17,20 +23,13 @@ async function mountApp() {
   if (rootEl.firstElementChild) {
     startTransition(() => {
       hydrateRoot(rootEl, element);
+      requestAnimationFrame(() => {
+        window.__markHydrated?.();
+      });
     });
   } else {
     createRoot(rootEl).render(element);
   }
 }
 
-if (!rootEl.firstElementChild) {
-  void mountApp();
-} else if ("requestIdleCallback" in window) {
-  (
-    window as Window & {
-      requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number;
-    }
-  ).requestIdleCallback(() => void mountApp(), { timeout: 1500 });
-} else {
-  setTimeout(() => void mountApp(), 150);
-}
+void mountApp();

@@ -37,6 +37,16 @@ async function run() {
 
   let baseTemplate = fs.readFileSync(templateHtmlPath, "utf-8");
 
+  // Capture Vite's compiled client entry module URL so pre-rendered pages can load React hydration off the critical LCP path
+  let clientEntrySrc = "";
+  const entryScriptMatch = baseTemplate.match(
+    /<script\s+type="module"\s+crossorigin\s+src="(\/assets\/[^"]+\.js)"><\/script>/
+  );
+  if (entryScriptMatch) {
+    clientEntrySrc = entryScriptMatch[1];
+    baseTemplate = baseTemplate.replace(entryScriptMatch[0], "");
+  }
+
   // Inline compiled CSS directly into <head> to eliminate the render-blocking CSS request on Mobile 4G & Desktop
   const cssLinkMatch = baseTemplate.match(
     /<link\s+rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/
@@ -142,7 +152,7 @@ async function run() {
       `<meta name="twitter:image" content="${escapeHtmlAttr(ogImageUrl)}" />`
     );
 
-    // 7. Extract any React 19 SSR hoisted <link rel="preload" as="image" .../> from appHtml and place it cleanly in <head>
+    // 7. Extract React 19 SSR hoisted <link rel="preload" as="image" .../> from appHtml and place it at the very top of <head> right after viewport
     let cleanedAppHtml = appHtml;
     const hoistedPreloadMatch = cleanedAppHtml.match(
       /<link\s+rel="preload"\s+as="image"[^>]*\/>/
@@ -151,21 +161,17 @@ async function run() {
       cleanedAppHtml = cleanedAppHtml.replace(hoistedPreloadMatch[0], "");
       if (route.path === "/") {
         html = html.replace(
-          "</head>",
-          `    ${hoistedPreloadMatch[0]}\n  </head>`
+          /(<meta\s+name="viewport"[\s\S]*?\/>)/,
+          `$1\n    ${hoistedPreloadMatch[0]}`
         );
       }
     }
 
-    // 8. Inject route-specific Schema.org JSON-LD
-    const formattedJsonLd = JSON.stringify(jsonLd, null, 2)
-      .split("\n")
-      .map((line, idx) => (idx === 0 ? line : `      ${line}`))
-      .join("\n");
-
+    // 8. Inject route-specific Schema.org JSON-LD (minified to save initial HTML bytes)
+    const compactJsonLd = JSON.stringify(jsonLd);
     html = html.replace(
       /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-      `<script type="application/ld+json">\n      ${formattedJsonLd}\n    </script>`
+      `<script type="application/ld+json">${compactJsonLd}</script>`
     );
 
     // 9. Inject pre-rendered semantic React HTML into <div id="root">
@@ -173,6 +179,47 @@ async function run() {
       /<div id="root"><\/div>/,
       () => `<div id="root">${cleanedAppHtml}</div>`
     );
+
+    // 10. Attach non-blocking progressive hydration + first-tap replay for pre-rendered HTML
+    if (clientEntrySrc) {
+      const hydrationBootstrap = `<script>
+(function(){
+  var booted = false;
+  var hydrated = false;
+  var pendingButton = null;
+  window.__markHydrated = function() {
+    hydrated = true;
+    if (pendingButton && document.contains(pendingButton)) {
+      var btn = pendingButton;
+      pendingButton = null;
+      btn.click();
+    }
+  };
+  function bootReact() {
+    if (booted) return;
+    booted = true;
+    var s = document.createElement("script");
+    s.type = "module";
+    s.crossOrigin = "";
+    s.src = ${JSON.stringify(clientEntrySrc)};
+    document.head.appendChild(s);
+  }
+  ["pointerdown", "keydown", "touchstart", "focusin"].forEach(function(ev) {
+    window.addEventListener(ev, bootReact, { once: true, passive: true });
+  });
+  window.addEventListener("scroll", bootReact, { once: true, passive: true });
+  document.addEventListener("click", function(e) {
+    if (hydrated) return;
+    var t = e.target && e.target.closest ? e.target.closest("button") : null;
+    if (t) {
+      pendingButton = t;
+      bootReact();
+    }
+  }, true);
+})();
+</script>`;
+      html = html.replace("</body>", `    ${hydrationBootstrap}\n  </body>`);
+    }
 
     // 10. Write static output file
     if (route.path === "/") {
