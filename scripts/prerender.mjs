@@ -162,29 +162,13 @@ async function run() {
     }
   }
 
-  // Generate comprehensive XML Sitemap with Google Image Sitemap extension
+  // Generate clean standard sitemaps.org 0.9 XML Sitemap
   const indexablePages = renderedPages.filter((p) => p.route.indexable);
   const urlEntriesXml = indexablePages
     .map(({ route }) => {
       const loc =
         route.path === "/" ? `${siteOrigin}/` : `${siteOrigin}${route.path}`;
-      const imagesXml = (route.sitemapImages || [])
-        .map(
-          (img) => `    <image:image>
-      <image:loc>${escapeXml(`${siteOrigin}${img.locPath}`)}</image:loc>
-      <image:title>${escapeXml(img.title)}</image:title>
-      <image:caption>${escapeXml(img.caption)}</image:caption>
-    </image:image>`
-        )
-        .join("\n");
-
-      return imagesXml
-        ? `  <url>
-    <loc>${escapeXml(loc)}</loc>
-    <lastmod>${lastmodDate}</lastmod>
-${imagesXml}
-  </url>`
-        : `  <url>
+      return `  <url>
     <loc>${escapeXml(loc)}</loc>
     <lastmod>${lastmodDate}</lastmod>
   </url>`;
@@ -192,10 +176,7 @@ ${imagesXml}
     .join("\n");
 
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urlEntriesXml}
 </urlset>
 `;
