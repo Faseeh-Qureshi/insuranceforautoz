@@ -35,7 +35,24 @@ async function run() {
     throw new Error(`Missing client HTML template at ${templateHtmlPath}`);
   }
 
-  const baseTemplate = fs.readFileSync(templateHtmlPath, "utf-8");
+  let baseTemplate = fs.readFileSync(templateHtmlPath, "utf-8");
+
+  // Inline compiled CSS directly into <head> to eliminate the render-blocking CSS request on Mobile 4G & Desktop
+  const cssLinkMatch = baseTemplate.match(
+    /<link\s+rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/
+  );
+  if (cssLinkMatch) {
+    const cssRelPath = cssLinkMatch[1].replace(/^\/+/, "");
+    const cssFullPath = path.join(distDir, cssRelPath);
+    if (fs.existsSync(cssFullPath)) {
+      const cssContent = fs.readFileSync(cssFullPath, "utf-8");
+      baseTemplate = baseTemplate.replace(
+        cssLinkMatch[0],
+        () => `<style>${cssContent}</style>`
+      );
+    }
+  }
+
   const ssrModule = await import(pathToFileURL(ssrEntryPath).href);
   const renderedPages = ssrModule.renderAllStaticPages();
 
@@ -125,12 +142,19 @@ async function run() {
       `<meta name="twitter:image" content="${escapeHtmlAttr(ogImageUrl)}" />`
     );
 
-    // 7. Only preload hero-suv-road.webp on the Home page where it is the above-the-fold LCP image
-    if (route.path !== "/") {
-      html = html.replace(
-        /\s*<!-- Preload critical LCP hero image -->\s*<link[\s\S]*?href="\/images\/hero-suv-road\.webp"[\s\S]*?\/>/,
-        ""
-      );
+    // 7. Extract any React 19 SSR hoisted <link rel="preload" as="image" .../> from appHtml and place it cleanly in <head>
+    let cleanedAppHtml = appHtml;
+    const hoistedPreloadMatch = cleanedAppHtml.match(
+      /<link\s+rel="preload"\s+as="image"[^>]*\/>/
+    );
+    if (hoistedPreloadMatch) {
+      cleanedAppHtml = cleanedAppHtml.replace(hoistedPreloadMatch[0], "");
+      if (route.path === "/") {
+        html = html.replace(
+          "</head>",
+          `    ${hoistedPreloadMatch[0]}\n  </head>`
+        );
+      }
     }
 
     // 8. Inject route-specific Schema.org JSON-LD
@@ -147,7 +171,7 @@ async function run() {
     // 9. Inject pre-rendered semantic React HTML into <div id="root">
     html = html.replace(
       /<div id="root"><\/div>/,
-      `<div id="root">${appHtml}</div>`
+      () => `<div id="root">${cleanedAppHtml}</div>`
     );
 
     // 10. Write static output file

@@ -1,6 +1,7 @@
 import { renderToString } from "react-dom/server";
 import App from "./App";
 import { SITE_CONFIG } from "./config/site";
+import { GuideRouteSwitch } from "./pages/GuidePages";
 import {
   SEO_ROUTES,
   buildRouteJsonLd,
@@ -29,7 +30,12 @@ export function renderAllStaticPages(): RenderedStaticPage[] {
   const fullPhoneDisplay = SITE_CONFIG.phone.fullDisplay;
 
   return SEO_ROUTES.map((route) => {
-    const appHtml = renderToString(<App initialPath={route.path} />);
+    const appHtml = renderToString(
+      <App
+        initialPath={route.path}
+        initialGuideSwitch={GuideRouteSwitch}
+      />
+    );
     const jsonLd = buildRouteJsonLd(route, {
       siteOrigin,
       schemaTel,

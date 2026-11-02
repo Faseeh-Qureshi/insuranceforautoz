@@ -1,4 +1,9 @@
-import { BadgePercent, CalendarCheck2, Scale, SlidersHorizontal } from "lucide-react";
+import {
+  BadgePercent,
+  CalendarCheck2,
+  Scale,
+  SlidersHorizontal,
+} from "./Icons";
 import { BenefitCard } from "./BenefitCard";
 
 const BENEFITS = [
@@ -58,6 +63,8 @@ export function BenefitsSection() {
               <div className="aspect-[16/9] sm:aspect-[16/10] overflow-hidden">
                 <img
                   src="/images/driver-savings.webp"
+                  srcSet="/images/driver-savings-480.webp 480w, /images/driver-savings-720.webp 720w, /images/driver-savings-1024.webp 1024w, /images/driver-savings.webp 1376w"
+                  sizes="(min-width: 1024px) 480px, (min-width: 640px) 92vw, 94vw"
                   alt="Smiling driver wearing sunglasses seated inside her car along a sunlit coastal highway"
                   width={1376}
                   height={768}

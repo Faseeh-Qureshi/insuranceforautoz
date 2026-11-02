@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Check, ChevronDown, Phone, Shield } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Phone, Shield } from "../components/Icons";
 import { SITE_CONFIG } from "../config/site";
 import {
   COVERAGE_FAQ_ITEMS,
@@ -140,17 +140,12 @@ function GuideFaqSection({
                     id={panelId}
                     role="region"
                     aria-labelledby={buttonId}
-                    className={`grid transition-[grid-template-rows,opacity] duration-150 ease-out ${
-                      isOpen
-                        ? "grid-rows-[1fr] opacity-100 mt-1 pb-1.5"
-                        : "grid-rows-[0fr] opacity-0"
-                    }`}
+                    hidden={!isOpen}
+                    className="mt-1 pb-1.5"
                   >
-                    <div className="overflow-hidden">
-                      <p className="pr-5 text-[13.5px] sm:text-[14px] text-[#34465D] leading-[1.58]">
-                        {item.answer}
-                      </p>
-                    </div>
+                    <p className="pr-5 text-[13.5px] sm:text-[14px] text-[#34465D] leading-[1.58]">
+                      {item.answer}
+                    </p>
                   </div>
                 </div>
               );
@@ -1008,4 +1003,23 @@ export function NotFoundPage() {
       </div>
     </section>
   );
+}
+
+export function GuideRouteSwitch({ routePath }: { routePath: string }) {
+  switch (routePath) {
+    case "/auto-insurance-coverage/":
+      return <CoverageGuidePage />;
+    case "/car-insurance-discounts/":
+      return <DiscountsGuidePage />;
+    case "/sr22-high-risk-auto-insurance/":
+      return <Sr22GuidePage />;
+    case "/how-it-works/":
+      return <HowItWorksPage />;
+    case "/privacy-policy/":
+      return <PrivacyPolicyPage />;
+    case "/terms-of-use/":
+      return <TermsOfUsePage />;
+    default:
+      return <NotFoundPage />;
+  }
 }

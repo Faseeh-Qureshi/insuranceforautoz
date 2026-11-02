@@ -11,6 +11,8 @@ export function FinalCTA() {
         <div className="relative rounded-xl overflow-hidden bg-[#071629] border border-[#122744] px-5 py-7 sm:px-10 sm:py-9 lg:px-12 lg:py-10 shadow-[0_14px_34px_rgba(7,22,41,0.14)]">
           <img
             src="/images/scenic-road-cta.webp"
+            srcSet="/images/scenic-road-cta-640.webp 640w, /images/scenic-road-cta-960.webp 960w, /images/scenic-road-cta.webp 1376w"
+            sizes="(min-width: 1280px) 1176px, 94vw"
             alt=""
             aria-hidden="true"
             width={1376}

@@ -26,20 +26,27 @@ function cleanInternalArtifactsPlugin(): Plugin {
 }
 
 export default defineConfig(({command}) => {
+  const isBuild = command === 'build';
   return {
     base: '/',
-    plugins: [react(), tailwindcss(), cleanInternalArtifactsPlugin()],
-    define:
-      command === 'build'
-        ? {
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          }
-        : undefined,
+    plugins: [
+      react(),
+      tailwindcss(),
+      cleanInternalArtifactsPlugin(),
+    ],
+    define: isBuild
+      ? {
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        }
+      : undefined,
     build: {
       target: 'es2020',
       assetsDir: 'assets',
       sourcemap: false,
-      cssCodeSplit: true,
+      cssCodeSplit: false,
+      modulePreload: {
+        polyfill: false,
+      },
     },
     resolve: {
       alias: {

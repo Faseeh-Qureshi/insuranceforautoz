@@ -11,10 +11,10 @@ export function MobileCallBar({ suppressed = false }: MobileCallBarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolledPastHero(window.scrollY > 360);
+      const past = window.scrollY > 360;
+      setScrolledPastHero((prev) => (prev === past ? prev : past));
     };
 
-    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

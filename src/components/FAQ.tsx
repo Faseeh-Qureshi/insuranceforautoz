@@ -1,27 +1,15 @@
-import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { HOME_FAQ_ITEMS as FAQ_ITEMS } from "../seo/routes";
+import { useState } from "react";
+import { ChevronDown } from "./Icons";
+import { HOME_FAQ_ITEMS as FAQ_ITEMS } from "../seo/clientRoutes";
 
 export function FAQ() {
   const [openIds, setOpenIds] = useState<Record<string, boolean>>({
     "faq-1": true,
-    "faq-2": true,
+    "faq-2": false,
     "faq-3": false,
     "faq-4": false,
     "faq-5": false,
   });
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setOpenIds({
-        "faq-1": true,
-        "faq-2": false,
-        "faq-3": false,
-        "faq-4": false,
-        "faq-5": false,
-      });
-    }
-  }, []);
 
   const toggleItem = (id: string) => {
     setOpenIds((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -73,17 +61,12 @@ export function FAQ() {
                   id={panelId}
                   role="region"
                   aria-labelledby={buttonId}
-                  className={`grid transition-[grid-template-rows,opacity] duration-150 ease-out ${
-                    isOpen
-                      ? "grid-rows-[1fr] opacity-100 mt-1 pb-1.5"
-                      : "grid-rows-[0fr] opacity-0"
-                  }`}
+                  hidden={!isOpen}
+                  className="mt-1 pb-1.5"
                 >
-                  <div className="overflow-hidden">
-                    <p className="pr-5 text-[13.5px] sm:text-[14px] text-[#34465D] leading-[1.58]">
-                      {item.answer}
-                    </p>
-                  </div>
+                  <p className="pr-5 text-[13.5px] sm:text-[14px] text-[#34465D] leading-[1.58]">
+                    {item.answer}
+                  </p>
                 </div>
               </div>
             );

@@ -1,4 +1,4 @@
-import { Phone } from "lucide-react";
+import { Phone } from "./Icons";
 import { SITE_CONFIG } from "../config/site";
 
 type CallButtonVariant =
@@ -62,7 +62,7 @@ export function CallNowButton({
       data-cta-placement={variant}
       onClick={handleTrackClick}
       aria-label={`Call InsuranceforAutoz at ${SITE_CONFIG.phone.fullDisplay}`}
-      className={`group inline-flex items-center justify-center gap-2 whitespace-nowrap shrink-0 tabular-nums transition-all duration-150 active:translate-y-0 active:scale-[0.985] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60A5FA] ${variantClasses[variant]} ${className}`}
+      className={`group inline-flex items-center justify-center gap-2 whitespace-nowrap shrink-0 tabular-nums transition-[transform,opacity,background-color] duration-150 active:translate-y-0 active:scale-[0.985] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#60A5FA] ${variantClasses[variant]} ${className}`}
     >
       <Phone
         size={iconSize}

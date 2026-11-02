@@ -1,8 +1,11 @@
-import { Check } from "lucide-react";
+import { Check } from "./Icons";
 import { SITE_CONFIG } from "../config/site";
 import { CallNowButton } from "./CallNowButton";
 
 const TRUST_POINTS = ["Free service", "No web forms", "No obligation"] as const;
+
+const HERO_SRCSET =
+  "/images/hero-suv-road-640.webp 640w, /images/hero-suv-road-960.webp 960w, /images/hero-suv-road.webp 1376w";
 
 export function HeroSection() {
   return (
@@ -10,28 +13,6 @@ export function HeroSection() {
       aria-labelledby="hero-heading"
       className="relative w-full bg-[#071526] text-white overflow-hidden"
     >
-      {/* Desktop & Tablet Panoramic Highway Backdrop (>= 768px) */}
-      <div className="hidden md:block absolute inset-0">
-        <img
-          src="/images/hero-suv-road.webp"
-          alt="Modern dark-blue SUV driving on a sunlit American highway toward a distant city skyline"
-          width={1376}
-          height={768}
-          loading="eager"
-          fetchPriority="high"
-          decoding="sync"
-          className="w-full h-full object-cover object-[76%_52%]"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,21,38,0.97)_0%,rgba(8,24,45,0.92)_38%,rgba(9,27,51,0.48)_58%,rgba(9,27,51,0.08)_82%)]"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#071526] via-[#071526]/55 to-transparent"
-        />
-      </div>
-
       {/* Subtle ambient depth on mobile */}
       <div
         aria-hidden="true"
@@ -78,24 +59,37 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Mobile Art-Directed Highway Visual (< 768px) */}
-      <div className="md:hidden relative w-full h-[170px] min-[390px]:h-[190px] sm:h-[224px] overflow-hidden">
+      {/* Single Responsive Highway Visual: flows below copy on mobile (<768px) and spans full backdrop on desktop (>=768px) */}
+      <div className="relative w-full h-[170px] min-[390px]:h-[190px] sm:h-[224px] md:absolute md:inset-0 md:h-full overflow-hidden">
         <img
           src="/images/hero-suv-road.webp"
+          srcSet={HERO_SRCSET}
+          sizes="100vw"
           alt="Modern dark-blue SUV driving on a sunlit American highway"
           width={1376}
           height={768}
           loading="eager"
+          fetchPriority="high"
           decoding="async"
-          className="w-full h-full object-cover object-[76%_54%]"
+          className="w-full h-full object-cover object-[76%_54%] md:object-[76%_52%]"
+        />
+        {/* Desktop lateral & bottom contrast gradients */}
+        <div
+          aria-hidden="true"
+          className="hidden md:block absolute inset-0 bg-[linear-gradient(90deg,rgba(7,21,38,0.97)_0%,rgba(8,24,45,0.92)_38%,rgba(9,27,51,0.48)_58%,rgba(9,27,51,0.08)_82%)]"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-11 bg-gradient-to-b from-[#071526] to-transparent"
+          className="hidden md:block absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#071526] via-[#071526]/55 to-transparent"
+        />
+        {/* Mobile top & bottom blend gradients */}
+        <div
+          aria-hidden="true"
+          className="md:hidden absolute inset-x-0 top-0 h-11 bg-gradient-to-b from-[#071526] to-transparent"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-13 bg-gradient-to-t from-[#071526] via-[#071526]/70 to-transparent"
+          className="md:hidden absolute inset-x-0 bottom-0 h-13 bg-gradient-to-t from-[#071526] via-[#071526]/70 to-transparent"
         />
       </div>
 

@@ -1,61 +1,41 @@
-import { useEffect, useState } from "react";
+import { type ComponentType, useEffect, useState } from "react";
 import { SITE_CONFIG } from "./config/site";
-import { getRouteMeta, normalizeRoutePath, type RouteSlug } from "./seo/routes";
-import { SiteHeader } from "./components/SiteHeader";
-import { HeroSection } from "./components/HeroSection";
-import { CarrierStrip } from "./components/CarrierStrip";
-import { BenefitsSection } from "./components/BenefitsSection";
-import { HowItWorks } from "./components/HowItWorks";
-import { CoverageCard } from "./components/CoverageCard";
-import { FAQ } from "./components/FAQ";
-import { FinalCTA } from "./components/FinalCTA";
-import { SiteFooter } from "./components/SiteFooter";
+import { getClientRouteMeta, normalizeRoutePath } from "./seo/clientRoutes";
+import type { RouteSlug } from "./seo/routes";
+import { HomePage } from "./components/HomePage";
 import { MobileCallBar } from "./components/MobileCallBar";
-import {
-  CoverageGuidePage,
-  DiscountsGuidePage,
-  HowItWorksPage,
-  NotFoundPage,
-  PrivacyPolicyPage,
-  Sr22GuidePage,
-  TermsOfUsePage,
-} from "./pages/GuidePages";
+import { SiteFooter } from "./components/SiteFooter";
+import { SiteHeader } from "./components/SiteHeader";
+
+export interface GuideSwitchProps {
+  routePath: string;
+}
 
 interface AppProps {
   initialPath?: string;
+  initialGuideSwitch?: ComponentType<GuideSwitchProps> | null;
 }
 
-function HomePage() {
-  return (
-    <>
-      <HeroSection />
-      <CarrierStrip />
-      <BenefitsSection />
-      <HowItWorks />
+let cachedGuideSwitch: ComponentType<GuideSwitchProps> | null = null;
+let pendingGuidePromise: Promise<ComponentType<GuideSwitchProps>> | null = null;
 
-      <section
-        id="coverage"
-        aria-label="Coverage scope and frequently asked questions"
-        className="w-full bg-[#E6DCCA] border-t border-[#CBBBA2] py-10 sm:py-14 lg:py-18"
-      >
-        <div className="max-w-[1240px] mx-auto pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-9 items-stretch">
-            <div className="lg:col-span-6">
-              <CoverageCard />
-            </div>
-            <div id="faq" className="lg:col-span-6">
-              <FAQ />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <FinalCTA />
-    </>
-  );
+export function loadGuideSwitch(): Promise<ComponentType<GuideSwitchProps>> {
+  if (cachedGuideSwitch) {
+    return Promise.resolve(cachedGuideSwitch);
+  }
+  if (!pendingGuidePromise) {
+    pendingGuidePromise = import("./pages/GuidePages").then((mod) => {
+      cachedGuideSwitch = mod.GuideRouteSwitch;
+      return mod.GuideRouteSwitch;
+    });
+  }
+  return pendingGuidePromise;
 }
 
-export default function App({ initialPath }: AppProps) {
+export default function App({
+  initialPath,
+  initialGuideSwitch = null,
+}: AppProps) {
   const [routePath, setRoutePath] = useState<RouteSlug>(() => {
     if (initialPath) {
       return normalizeRoutePath(initialPath);
@@ -65,11 +45,14 @@ export default function App({ initialPath }: AppProps) {
     }
     return "/";
   });
+  const [GuideSwitch, setGuideSwitch] = useState<ComponentType<GuideSwitchProps> | null>(
+    () => initialGuideSwitch || cachedGuideSwitch
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Sync document head metadata and GA4 virtual page views on client transitions
+  // Sync document head metadata on client route transitions
   useEffect(() => {
-    const meta = getRouteMeta(routePath);
+    const meta = getClientRouteMeta(routePath);
     const dynamicDescription = meta.description.replace(
       "+1 (848) 467-1057",
       SITE_CONFIG.phone.fullDisplay
@@ -79,25 +62,25 @@ export default function App({ initialPath }: AppProps) {
         ? `${SITE_CONFIG.siteOrigin}/`
         : `${SITE_CONFIG.siteOrigin}${meta.path}`;
 
-    document.title = meta.title;
+    if (document.title !== meta.title) {
+      document.title = meta.title;
+    }
 
     const descTag = document.querySelector('meta[name="description"]');
-    if (descTag) {
+    if (descTag && descTag.getAttribute("content") !== dynamicDescription) {
       descTag.setAttribute("content", dynamicDescription);
     }
 
+    const robotsValue = meta.indexable
+      ? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      : "noindex, follow";
     const robotsTag = document.querySelector('meta[name="robots"]');
-    if (robotsTag) {
-      robotsTag.setAttribute(
-        "content",
-        meta.indexable
-          ? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-          : "noindex, follow"
-      );
+    if (robotsTag && robotsTag.getAttribute("content") !== robotsValue) {
+      robotsTag.setAttribute("content", robotsValue);
     }
 
     const canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (canonicalTag && meta.indexable) {
+    if (canonicalTag && meta.indexable && canonicalTag.getAttribute("href") !== canonicalUrl) {
       canonicalTag.setAttribute("href", canonicalUrl);
     }
   }, [routePath]);
@@ -116,10 +99,44 @@ export default function App({ initialPath }: AppProps) {
       }
     };
 
+    const navigateToSlug = (nextSlug: RouteSlug, hash: string, pushHistoryHref?: string) => {
+      const applyTransition = () => {
+        if (pushHistoryHref !== undefined) {
+          window.history.pushState(null, "", pushHistoryHref);
+          if (typeof window.gtag === "function") {
+            window.gtag("event", "page_view", {
+              page_path: nextSlug,
+              page_location: `${window.location.origin}${pushHistoryHref}`,
+            });
+          }
+        }
+        setRoutePath(nextSlug);
+        if (hash) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => scrollToHash(hash));
+          });
+        } else if (pushHistoryHref !== undefined) {
+          window.scrollTo({ top: 0, behavior: "auto" });
+        }
+      };
+
+      if (nextSlug !== "/" && !cachedGuideSwitch) {
+        void loadGuideSwitch().then((Loaded) => {
+          setGuideSwitch(() => Loaded);
+          applyTransition();
+        });
+      } else {
+        if (cachedGuideSwitch && !GuideSwitch) {
+          setGuideSwitch(() => cachedGuideSwitch);
+        }
+        applyTransition();
+      }
+    };
+
     const handlePopState = () => {
       const next = normalizeRoutePath(window.location.pathname);
-      setRoutePath(next);
       setMobileMenuOpen(false);
+      navigateToSlug(next, window.location.hash);
     };
 
     const handleDocumentClick = (event: MouseEvent) => {
@@ -183,23 +200,7 @@ export default function App({ initialPath }: AppProps) {
       }
 
       const nextHref = `${nextSlug === "/404/" ? parsed.pathname : nextSlug}${parsed.hash}`;
-      window.history.pushState(null, "", nextHref);
-      setRoutePath(nextSlug);
-
-      if (typeof window.gtag === "function") {
-        window.gtag("event", "page_view", {
-          page_path: nextSlug,
-          page_location: `${window.location.origin}${nextHref}`,
-        });
-      }
-
-      if (parsed.hash) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => scrollToHash(parsed.hash));
-        });
-      } else {
-        window.scrollTo({ top: 0, behavior: "auto" });
-      }
+      navigateToSlug(nextSlug, parsed.hash, nextHref);
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -209,35 +210,9 @@ export default function App({ initialPath }: AppProps) {
       window.removeEventListener("popstate", handlePopState);
       document.removeEventListener("click", handleDocumentClick);
     };
-  }, []);
+  }, [GuideSwitch]);
 
-  let pageContent: React.ReactNode;
-  switch (routePath) {
-    case "/":
-      pageContent = <HomePage />;
-      break;
-    case "/auto-insurance-coverage/":
-      pageContent = <CoverageGuidePage />;
-      break;
-    case "/car-insurance-discounts/":
-      pageContent = <DiscountsGuidePage />;
-      break;
-    case "/sr22-high-risk-auto-insurance/":
-      pageContent = <Sr22GuidePage />;
-      break;
-    case "/how-it-works/":
-      pageContent = <HowItWorksPage />;
-      break;
-    case "/privacy-policy/":
-      pageContent = <PrivacyPolicyPage />;
-      break;
-    case "/terms-of-use/":
-      pageContent = <TermsOfUsePage />;
-      break;
-    default:
-      pageContent = <NotFoundPage />;
-      break;
-  }
+  const ActiveGuideSwitch = GuideSwitch || initialGuideSwitch || cachedGuideSwitch;
 
   return (
     <div className="min-h-[100svh] flex flex-col bg-[#F2EBDF] text-[#0A1B33]">
@@ -247,7 +222,13 @@ export default function App({ initialPath }: AppProps) {
         onToggleMobileMenu={setMobileMenuOpen}
       />
 
-      <main className="flex-1">{pageContent}</main>
+      <main className="flex-1">
+        {routePath === "/" || !ActiveGuideSwitch ? (
+          <HomePage />
+        ) : (
+          <ActiveGuideSwitch routePath={routePath} />
+        )}
+      </main>
 
       <SiteFooter />
 

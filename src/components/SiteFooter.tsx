@@ -1,4 +1,4 @@
-import { MapPin, Phone } from "lucide-react";
+import { MapPin, Phone } from "./Icons";
 import { SITE_CONFIG } from "../config/site";
 import { BrandMark } from "./BrandMark";
 import { CallNowButton } from "./CallNowButton";

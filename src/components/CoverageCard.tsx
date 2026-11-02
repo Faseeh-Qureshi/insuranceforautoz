@@ -1,4 +1,4 @@
-import { AlertCircle, CarFront, FileText, Shield } from "lucide-react";
+import { AlertCircle, CarFront, FileText, Shield } from "./Icons";
 
 const COVERAGE_ITEMS = [
   {
@@ -29,6 +29,8 @@ export function CoverageCard() {
       <div className="relative p-6 sm:p-8 pb-6 overflow-hidden">
         <img
           src="/images/mountain-road-coverage.webp"
+          srcSet="/images/mountain-road-coverage-480.webp 480w, /images/mountain-road-coverage-720.webp 720w, /images/mountain-road-coverage.webp 1200w"
+          sizes="(min-width: 1024px) 576px, (min-width: 640px) 92vw, 94vw"
           alt="Open mountain highway winding through evergreen forest"
           width={1200}
           height={896}

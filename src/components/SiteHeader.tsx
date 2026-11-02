@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Menu, Phone, X } from "lucide-react";
+import { Menu, Phone, X } from "./Icons";
 import { SITE_CONFIG } from "../config/site";
 import { BrandMark } from "./BrandMark";
 import { CallNowButton } from "./CallNowButton";
@@ -18,13 +18,15 @@ export function SiteHeader({
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024 && mobileMenuOpen) {
+    if (!mobileMenuOpen) return;
+    const mql = window.matchMedia("(min-width: 1024px)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
         onToggleMobileMenu(false);
       }
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    mql.addEventListener("change", handleChange);
+    return () => mql.removeEventListener("change", handleChange);
   }, [mobileMenuOpen, onToggleMobileMenu]);
 
   useEffect(() => {

@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="en-US">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MWDS4RD80S"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-MWDS4RD80S');
-    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -73,11 +64,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap"
-    />
-    <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap"
       rel="stylesheet"
       media="print"
@@ -89,15 +75,6 @@
         rel="stylesheet"
       />
     </noscript>
-
-    <!-- Preload critical LCP hero image -->
-    <link
-      rel="preload"
-      as="image"
-      href="/images/hero-suv-road.webp"
-      type="image/webp"
-      fetchpriority="high"
-    />
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
@@ -228,5 +205,35 @@
   <body class="bg-[#F2EBDF] text-[#0A1B33] antialiased selection:bg-[#0A56C2]/15 selection:text-[#0A1B33]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-MWDS4RD80S");
+      (function () {
+        var loaded = false;
+        function loadGtag() {
+          if (loaded) return;
+          loaded = true;
+          var s = document.createElement("script");
+          s.async = true;
+          s.src = "https://www.googletagmanager.com/gtag/js?id=G-MWDS4RD80S";
+          document.head.appendChild(s);
+        }
+        var events = ["pointerdown", "keydown", "touchstart", "scroll"];
+        events.forEach(function (ev) {
+          window.addEventListener(ev, loadGtag, { once: true, passive: true });
+        });
+        window.addEventListener(
+          "load",
+          function () {
+            setTimeout(loadGtag, 3500);
+          },
+          { once: true }
+        );
+      })();
+    </script>
   </body>
 </html>
